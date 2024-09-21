@@ -1,0 +1,432 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Huzaifah's Portfolio</title>
+    <style>
+        /* ... existing styles ... */
+
+        #categoryCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .category-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+    <canvas id="categoryCanvas"></canvas>
+    <!-- ... existing content ... -->
+
+    <script>
+        // ... existing JavaScript ...
+
+        // Three.js setup
+        let threeScene, threeCamera, threeRenderer;
+
+        function initThreeJS() {
+            threeScene = new THREE.Scene();
+            threeCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            threeRenderer = new THREE.WebGLRenderer({ canvas: document.getElementById('categoryCanvas'), alpha: true });
+            threeRenderer.setSize(window.innerWidth, window.innerHeight);
+
+            // Create particles
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesCount = 5000;
+            const posArray = new Float32Array(particlesCount * 3);
+
+            for (let i = 0; i < particlesCount * 3; i++) {
+                posArray[i] = (Math.random() - 0.5) * 5;
+            }
+
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.005,
+                color: 0x4a5568,
+            });
+
+            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+            threeScene.add(particlesMesh);
+
+            threeCamera.position.z = 3;
+
+            // Animation
+            function animate() {
+                requestAnimationFrame(animate);
+                particlesMesh.rotation.x += 0.0005;
+                particlesMesh.rotation.y += 0.0005;
+                threeRenderer.render(threeScene, threeCamera);
+            }
+
+            animate();
+
+            // Resize handler
+            window.addEventListener('resize', () => {
+                threeCamera.aspect = window.innerWidth / window.innerHeight;
+                threeCamera.updateProjectionMatrix();
+                threeRenderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+
+        // Initialize Three.js after the DOM is loaded
+        document.addEventListener('DOMContentLoaded', initThreeJS);
+
+        // ... rest of your existing JavaScript ...
+    </script>
+</body>
+</html>
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Huzaifah's  Portfolio</title>
+    <style>
+        :root {
+            --primary-color: #f0f4f8;
+            --secondary-color: #e2e8f0;
+            --accent-color: #4a5568;
+            --text-color: #2d3748;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: var(--primary-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        header {
+            background: var(--secondary-color);
+            color: var(--text-color);
+            text-align: center;
+            padding: 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            animation: shine 10s infinite linear;
+        }
+        @keyframes shine {
+            0% { transform: translateX(-50%) rotate(45deg); }
+            100% { transform: translateX(50%) rotate(45deg); }
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background: var(--secondary-color);
+            padding: 10px 0;
+        }
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        nav a:hover {
+            background: var(--accent-color);
+            color: var(--primary-color);
+            transform: translateY(-3px) scale(1.05);
+        }
+        .category-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px 0;
+        }
+        .category-card {
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        .category-card:hover {
+            transform: translateY(-10px) rotateY(10deg);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        .category-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        .category-card:hover img {
+            transform: scale(1.1);
+        }
+        .category-card h3 {
+            padding: 15px;
+            margin: 0;
+            text-align: center;
+            background: var(--secondary-color);
+            transition: all 0.3s ease;
+        }
+        .category-card:hover h3 {
+            background: var(--accent-color);
+            color: var(--primary-color);
+        }
+        .certificate-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            perspective: 1000px;
+        }
+        .certificate-content {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+            max-height: 80%;
+            animation: zoom-rotate 0.6s;
+            box-shadow: 0 0 50px rgba(255,255,255,0.2);
+        }
+        @keyframes zoom-rotate {
+            from {transform: scale(0) rotateY(-90deg)} 
+            to {transform: scale(1) rotateY(0)}
+        }
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: var(--primary-color);
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .close:hover,
+        .close:focus {
+            color: var(--secondary-color);
+            text-decoration: none;
+            cursor: pointer;
+            transform: rotate(90deg);
+        }
+        .background-3d {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="background-3d" id="background3d"></div>
+    <header>
+        <h1>My Certificates Portfolio</h1>
+    </header>
+    <nav id="categoryNav">
+        <!-- Category links will be dynamically added here -->
+    </nav>
+    <div class="container" id="content">
+        <!-- Content will be dynamically loaded here -->
+    </div>
+    <div id="certificateModal" class="certificate-modal">
+        <span class="close">&times;</span>
+        <img class="certificate-content" id="certificateImage">
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Certificate categories
+        const categories = [
+            { id: 1, name: 'Python for Data Analytics', image: 'https://via.placeholder.com/400x200?text=Python+for+Data+Analytics' },
+            { id: 2, name: 'Data Analytics', image: 'https://via.placeholder.com/400x200?text=Data+Analytics' },
+            { id: 3, name: 'Internship and Job', image: 'https://via.placeholder.com/400x200?text=Others' },
+        ];
+
+        // Sample certificates data
+        const certificates = [
+            { id: 1, title: 'Internship Certificate', category: 3, image: 'https://raw.githubusercontent.com/Huzaifah-Analyst/My_Portfolio/main/internship%20certificate.jpeg' },
+            { id: 2, title: 'Google Data Analytics Professional Certificate', category: 2, image: 'https://raw.githubusercontent.com/Huzaifah-Analyst/My_Portfolio/main/google%20data%20analytics%20professional%20Certificate_page-0001.jpg' },
+            { id: 3, title: 'Supervised Learning with Scikit-learn', category: 1, image: 'https://raw.githubusercontent.com/Huzaifah-Analyst/My_Portfolio/main/machine%20learning%20datacamp_page-0001.jpg' },
+            { id: 4, title: 'Data Manipulation with Python', category: 1, image: 'https://raw.githubusercontent.com/Huzaifah-Analyst/My_Portfolio/main/Data%20Manipulation%20with%20Python%20DaataCamp_page-0001.jpg' },
+            { id: 5, title: 'Power BI', category: 2, image: 'https://raw.githubusercontent.com/Huzaifah-Analyst/My_Portfolio/main/power%20bi%20certificate_page-0001.jpg' },
+            { id: 6, title: 'Job Simulation at Accenture', category: 3, image: 'https://raw.githubusercontent.com/Huzaifah-Analyst/My_Portfolio/main/Accenture%20certificate_page-0001.jpg' },
+            
+        ];
+
+        // Function to display categories
+        function displayCategories() {
+            const nav = document.getElementById('categoryNav');
+            categories.forEach(category => {
+                const link = document.createElement('a');
+                link.href = `#category-${category.id}`;
+                link.textContent = category.name;
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    displayCategory(category.id);
+                });
+                nav.appendChild(link);
+            });
+        }
+
+        // Function to display certificates for a category
+        function displayCategory(categoryId) {
+            const content = document.getElementById('content');
+            const category = categories.find(cat => cat.id === categoryId);
+            const categoryCertificates = certificates.filter(cert => cert.category === categoryId);
+
+            let html = `<h2>${category.name}</h2>`;
+            html += '<div class="category-container">';
+            categoryCertificates.forEach(cert => {
+                html += `
+                    <div class="category-card" onclick="openCertificate('${cert.image}')">
+                        <img src="${cert.image}" alt="${cert.title}">
+                        <h3>${cert.title}</h3>
+                    </div>
+                `;
+            });
+            html += '</div>';
+
+            content.innerHTML = html;
+        }
+
+        // Function to open certificate modal
+        function openCertificate(imageSrc) {
+            const modal = document.getElementById('certificateModal');
+            const modalImg = document.getElementById('certificateImage');
+            modal.style.display = "block";
+            modalImg.src = imageSrc;
+        }
+
+        // Close the modal when clicking on <span> (x)
+        document.getElementsByClassName('close')[0].onclick = function() {
+            document.getElementById('certificateModal').style.display = "none";
+        }
+
+        // Initial setup
+        displayCategories();
+        // Display all categories by default
+        const content = document.getElementById('content');
+        let html = '<div class="category-container">';
+        categories.forEach(category => {
+            html += `
+                <div class="category-card" onclick="displayCategory(${category.id})">
+                    <img src="${category.image}" alt="${category.name}">
+                    <h3>${category.name}</h3>
+                </div>
+            `;
+        });
+        html += '</div>';
+        content.innerHTML = html;
+
+        // 3D Background
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('background3d').appendChild(renderer.domElement);
+
+        // Create a group to hold all our objects
+        const group = new THREE.Group();
+        scene.add(group);
+
+        // Create multiple geometric shapes
+        const geometries = [
+            new THREE.TorusKnotGeometry(10, 3, 100, 16),
+            new THREE.IcosahedronGeometry(7, 0),
+            new THREE.OctahedronGeometry(8, 0),
+            new THREE.TetrahedronGeometry(7, 0)
+        ];
+
+        const materials = [
+            new THREE.MeshBasicMaterial({ color: 0xe2e8f0, wireframe: true }),
+            new THREE.MeshBasicMaterial({ color: 0x4a5568, wireframe: true }),
+            new THREE.MeshBasicMaterial({ color: 0x2d3748, wireframe: true }),
+            new THREE.MeshBasicMaterial({ color: 0xf0f4f8, wireframe: true })
+        ];
+
+        geometries.forEach((geometry, index) => {
+            const mesh = new THREE.Mesh(geometry, materials[index]);
+            mesh.position.set(Math.random() * 40 - 20, Math.random() * 40 - 20, Math.random() * 40 - 20);
+            group.add(mesh);
+        });
+
+        camera.position.z = 50;
+
+        // Add some lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+
+        const pointLight = new THREE.PointLight(0xffffff, 1);
+        pointLight.position.set(25, 50, 25);
+        scene.add(pointLight);
+
+        function animate() {
+            requestAnimationFrame(animate);
+            group.rotation.x += 0.001;
+            group.rotation.y += 0.002;
+            geometries.forEach((geometry, index) => {
+                group.children[index].rotation.x += 0.01;
+                group.children[index].rotation.y += 0.01;
+            });
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Resize handler
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
